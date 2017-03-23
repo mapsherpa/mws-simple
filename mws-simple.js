@@ -105,7 +105,14 @@ Client.prototype.request = function(requestData, callback) {
         delimiter:'\t',
         columns: true,
         relax: true
-      }, callback);
+      }, function(err, result) {
+        if (err && err.toString().indexOf("Number of columns on") !== -1) {
+          return callback(null, body);
+        } else if (err) {
+          return callback (err);
+        }
+        callback(null, result);
+      });
     }
   });
 };
